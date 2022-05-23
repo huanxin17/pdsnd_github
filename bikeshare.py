@@ -22,7 +22,7 @@ def get_filters():
         if city not in CITY_DATA.keys():
            city=input("Invalid data \n")
         else:
-           break   
+           break
 
     # TO DO: get user input for month (all, january, february, ... , june)
     months=set(['all','january','february','march','april','may','june'])
@@ -69,18 +69,22 @@ def load_data(city, month, day):
     
     if day !='all':
         df=df[df['day_of_week'] == day.title()]
-    
-    #display 5 line data
-    x=5
+
+    display_5_lines(df)
+
+    return df
+
+
+def display_5_lines(df):
+    # display 5 line data
+    x = 5
     while True:
         display_5_line = input('\nWould you like to display 5 line data? Enter yes or no.\n')
-        display=df.head(x)
+        display = df.head(x)
         print(display)
-        x+=5
+        x += 5
         if display_5_line.lower() != 'yes':
             break
-    
-    return df
 
 
 def time_stats(df):
