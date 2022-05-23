@@ -2,9 +2,10 @@ import time
 import pandas as pd
 import numpy as np
 
-CITY_DATA = { 'chicago': 'chicago.csv',
-              'new york city': 'new_york_city.csv',
-              'washington': 'washington.csv' }
+CITY_DATA = {'chicago': 'chicago.csv',
+             'new york city': 'new_york_city.csv',
+             'washington': 'washington.csv'}
+
 
 def get_filters():
     """
@@ -17,33 +18,35 @@ def get_filters():
     """
     print('Hello! Let\'s explore some US bikeshare data!')
     # TO DO: get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
-    city=input('Which city would you want to analyze? input :  chicago , new york city, washington\n').lower()
+    cities = input('Which city would you want to analyze? input :  chicago , new york city, washington\n').lower()
     while True:
-        if city not in CITY_DATA.keys():
-           city=input("Invalid data \n")
+        if cities not in CITY_DATA.keys():
+            cities = input("Invalid data \n")
         else:
-           break
+            break
 
     # TO DO: get user input for month (all, january, february, ... , june)
-    months=set(['all','january','february','march','april','may','june'])
-    month=input('Which month would you want to analyze? input : all, january, february, march , april, may,june\n').lower()
+    months = set(['all', 'january', 'february', 'march', 'april', 'may', 'june'])
+    month = input(
+        'Which month would you want to analyze? input : all, january, february, march , april, may,june\n').lower()
     while True:
         if month not in months:
-           month=input("Invalid data \n").lower()
+            month = input("Invalid data \n").lower()
         else:
-           break
+            break
 
-    # TO DO: get user input for day of week (all, monday, tuesday, ... sunday)
-    days=['all','monday','tuesday','wednesday','thursday','friday','saturday','sunday']
-    day=input('Which month would you want to analyze? input : all,monday,tuesday,wednesday,thursday,friday,saturday,sunday\n').lower()
+            # TO DO: get user input for day of week (all, monday, tuesday, ... sunday)
+    days = ['all', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+    day = input(
+        'Which month would you want to analyze? input : all,monday,tuesday,wednesday,thursday,friday,saturday,sunday\n').lower()
     while True:
         if day not in days:
-           day=input("Invalid data \n").lower()
+            day = input("Invalid data \n").lower()
         else:
-           break
+            break
 
-    print('-'*40)
-    return city, month, day
+    print('-' * 40)
+    return cities, month, day
 
 
 def load_data(city, month, day):
@@ -57,31 +60,35 @@ def load_data(city, month, day):
     Returns:
         df - Pandas DataFrame containing city data filtered by month and day
     """
-    df=pd.read_csv(CITY_DATA[city])
-    df['Start Time']=pd.to_datetime(df['Start Time'])
-    df['month']=df['Start Time'].dt.month
-    df['day_of_week']=df['Start Time'].dt.weekday_name
 
-    if month !='all':
-        months=['january','february','march','april','may','june']
-        month = months.index(month)+1
-        df=df[df['month'] == month]
+    df = pd.read_csv(CITY_DATA[city])
+    df['Start Time'] = pd.to_datetime(df['Start Time'])
+    df['month'] = df['Start Time'].dt.month
+    df['day_of_week'] = df['Start Time'].dt.weekday_name
 
-    if day !='all':
-        df=df[df['day_of_week'] == day.title()]
+    if month != 'all':
+        months = ['january', 'february', 'march', 'april', 'may', 'june']
+        month = months.index(month) + 1
+        df = df[df['month'] == month]
 
-    #display 5 line data
-    x=5
-    while True:
-        display_5_line = input('\nWould you like to display 5 line data? Enter yes or no.\n')
-        display=df.head(x)
-        print(display)
-        x+=5
-        if display_5_line.lower() != 'yes':
-            break
+    if day != 'all':
+        df = df[df['day_of_week'] == day.title()]
+
+    display_5_lines(df)
 
     return df
 
+
+def display_5_lines(df):
+    # display 5 line data
+    x = 5
+    while True:
+        display_5_line = input('\nWould you like to display 5 line data? Enter yes or no.\n')
+        display = df.head(x)
+        print(display)
+        x += 5
+        if display_5_line.lower() != 'yes':
+            break
 
 def time_stats(df):
     """Displays statistics on the most frequent times of travel."""
@@ -90,11 +97,11 @@ def time_stats(df):
     start_time = time.time()
 
     # TO DO: display the most common month
-    popular_month=df['month'].mode()[0]
-    print("The Most Frequent Month of Travel:\n",(popular_month))
+    popular_month = df['month'].mode()[0]
+    print("The Most Frequent Month of Travel:\n", (popular_month))
     # TO DO: display the most common day of week
-    popular_day=df['day_of_week'].mode()[0]
-    print("The Most Frequent day of Travel:\n",(popular_day))
+    popular_day = df['day_of_week'].mode()[0]
+    print("The Most Frequent day of Travel:\n", (popular_day))
     # TO DO: display the most common start hour
     df['hour'] = df['Start Time'].dt.hour
     popular_hour = df['hour'].mode()[0]
@@ -102,7 +109,7 @@ def time_stats(df):
 
     # TO DO: display calculation time
     print("\nThis took %s seconds." % (time.time() - start_time))
-    print('-'*40)
+    print('-' * 40)
 
 
 def station_stats(df):
@@ -126,7 +133,7 @@ def station_stats(df):
 
     # TO DO: display calculation time
     print("\nThis took %s seconds." % (time.time() - start_time))
-    print('-'*40)
+    print('-' * 40)
 
 
 def trip_duration_stats(df):
@@ -148,7 +155,7 @@ def trip_duration_stats(df):
 
     # TO DO: display calculation time
     print("\nThis took %s seconds." % (time.time() - start_time))
-    print('-'*40)
+    print('-' * 40)
 
 
 def user_stats(df):
@@ -164,7 +171,7 @@ def user_stats(df):
     # TO DO: Display counts of gender
     try:
         user_gender = df['Gender'].value_counts()
-        print("counts of user gender\n",user_gender)
+        print("counts of user gender\n", user_gender)
     except keyError:
         print("counts of user gender: sorry, this city have no this data.")
 
@@ -185,7 +192,7 @@ def user_stats(df):
 
     # TO DO: display calculation time
     print("\nThis took %s seconds." % (time.time() - start_time))
-    print('-'*40)
+    print('-' * 40)
 
 
 def main():
@@ -204,4 +211,4 @@ def main():
 
 
 if __name__ == "__main__":
-	main()
+    main()
